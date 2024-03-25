@@ -58,6 +58,25 @@ func GetComments(c *gin.Context) {
 	c.JSON(http.StatusOK, comments)
 }
 
+func GetCommentByID(c *gin.Context) {
+
+	commentID := c.Param("commentId")
+
+	id, err := strconv.ParseUint(commentID, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid comment ID"})
+		return
+	}
+
+	var comment models.Comment
+	if err := database.DB.Where("id = ?", id).First(&comment).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Comment not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, comment)
+}
+
 func UpdateComment(c *gin.Context) {
 	commentID := c.Param("commentId")
 	id, err := strconv.ParseUint(commentID, 10, 64)

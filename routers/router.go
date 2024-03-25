@@ -23,6 +23,7 @@ func StartApp() *gin.Engine {
 	{
 		photos.POST("/", middlewares.Authenticate(), controllers.CreatePhoto)
 		photos.GET("/", middlewares.Authenticate(), controllers.GetPhotos)
+		photos.GET("/:photoId", middlewares.Authenticate(), controllers.GetPhotoByID)
 		photos.PUT("/:photoId", middlewares.Authenticate(), middlewares.AuthorizePhoto(), controllers.UpdatePhoto)
 		photos.DELETE("/:photoId", middlewares.Authenticate(), middlewares.AuthorizePhoto(), controllers.DeletePhoto)
 	}
@@ -31,6 +32,7 @@ func StartApp() *gin.Engine {
 	{
 		comments.POST("/", middlewares.Authenticate(), controllers.CreateComment)
 		comments.GET("/", middlewares.Authenticate(), controllers.GetComments)
+		comments.GET("/:commentId", middlewares.Authenticate(), controllers.GetCommentByID)
 		comments.PUT("/:commentId", middlewares.Authenticate(), middlewares.AuthorizeComment(), controllers.UpdateComment)
 		comments.DELETE("/:commentId", middlewares.Authenticate(), middlewares.AuthorizeComment(), controllers.DeleteComment)
 	}
@@ -39,6 +41,7 @@ func StartApp() *gin.Engine {
 	{
 		socialMedia.POST("/", middlewares.Authenticate(), controllers.CreateSocialMedia)
 		socialMedia.GET("/", middlewares.Authenticate(), controllers.GetSocialMedias)
+		socialMedia.GET("/:socialMediaId", middlewares.Authenticate(), controllers.GetSocialMediaByID)
 		socialMedia.PUT("/:socialMediaId", middlewares.Authenticate(), middlewares.AuthorizeSocialMedia(), controllers.UpdateSocialMedia)
 		socialMedia.DELETE("/:socialMediaId", middlewares.Authenticate(), middlewares.AuthorizeSocialMedia(), controllers.DeleteSocialMedia)
 	}

@@ -4,6 +4,7 @@ import (
 	"final-project/database"
 	"final-project/models"
 	"net/http"
+	"strconv"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -48,6 +49,24 @@ func GetSocialMedias(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, socialMedias)
+}
+
+func GetSocialMediaByID(c *gin.Context) {
+	socialMediaID := c.Param("socialMediaId")
+
+	id, err := strconv.ParseUint(socialMediaID, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid social media ID"})
+		return
+	}
+
+	var socialMedia models.SocialMedia
+	if err := database.DB.Where("id = ?", id).First(&socialMedia).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Social media not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, socialMedia)
 }
 
 func UpdateSocialMedia(c *gin.Context) {

@@ -45,6 +45,24 @@ func GetPhotos(c *gin.Context) {
 	c.JSON(http.StatusOK, photos)
 }
 
+func GetPhotoByID(c *gin.Context) {
+	photoID := c.Param("photoId")
+
+	id, err := strconv.ParseUint(photoID, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid photo ID"})
+		return
+	}
+
+	var photo models.Photo
+	if err := database.DB.Where("id = ?", id).First(&photo).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Photo not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, photo)
+}
+
 func UpdatePhoto(c *gin.Context) {
 	photoID := c.Param("photoId")
 	id, err := strconv.ParseUint(photoID, 10, 64)
